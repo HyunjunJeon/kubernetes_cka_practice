@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: alpine-deploy
+  labels:
+    run: alpine-deploy
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: alpine-deploy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: alpine-deploy
+    spec:
+      containers:
+      - name: alpine-deploy
+        image: alpine:3.5
