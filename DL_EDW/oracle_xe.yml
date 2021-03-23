@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oracle-11g-xe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oracle-11g-xe
+  template:
+    metadata:
+      labels:
+        app: oracle-11g-xe
+    spec:
+      containers:
+      - name: oracle-11g-xe
+        image: oracleinanutshell/oracle-xe-11g
+        ports:
+        - containerPort: 1521
+
+# id: system & pw: oracle
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: oracle-svc
+spec:
+  type: NodePort
+  selector:
+    app: oracle-11g-xe
+  ports:
+  - protocol: TCP
+    port: 1521
+    targetPort: 1521
+    nodePort: 32000
+

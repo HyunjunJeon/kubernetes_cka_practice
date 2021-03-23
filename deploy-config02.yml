@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap-app2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: configmap-app2
+  template:
+    metadata:
+      labels:
+        app: configmap-app2
+    spec:
+      containers:
+      - name: configmap-app
+        image: arisu1000/simple-container-app:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: config-prod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: configmap-appsvc2
+  labels:
+    app: configmap-app2-svc2
+  namespace: default
+spec:
+  selector:
+    app: configmap-app2
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 30084
+  type: NodePort

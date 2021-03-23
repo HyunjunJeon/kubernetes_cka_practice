@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-app4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-app4
+  template:
+    metadata:
+      labels:
+        app: config-app4
+    spec:
+      containers:
+      - name: config-app4
+        image: arisu1000/simple-container-app:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - mountPath: /etc/config
+            name: config-volume
+      volumes:
+      - name: config-volume
+        configMap:
+          name: config-dev
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-app4-svc
+spec:
+  selector:
+    app: config-app4
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 30805
+  type: NodePort

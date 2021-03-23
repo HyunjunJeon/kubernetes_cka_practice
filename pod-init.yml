@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-simple-pod
+  labels:
+    name: k8s-simple-pod
+spec:
+  initContainers:
+    - name: init-myservice
+      image: arisu1000/simple-container-app:latest
+      command: ['sh', '-c', 'sleep 2; echo helloworld01;']
+  containers:
+  - name: k8s-simple-pod
+    image: arisu1000/simple-container-app:latest
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']

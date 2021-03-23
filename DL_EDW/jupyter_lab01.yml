@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter01
+spec:
+  selector:
+    matchLabels:
+      app: jupyter01
+  template:
+    metadata:
+      labels:
+        app: jupyter01
+    spec:
+      containers:
+      - name: jupyter01
+        image: jupyter/datascience-notebook:latest
+        ports:
+        - containerPort: 8888
+        env:
+        - name: GRANT_SUDO
+          value: "yes"
+
+# 서비스로 NodePort는 물리지 않고 Cluster IP만 물려서 3개 생성함
+# 내부 호출로 HAProxy에 호출할 수 있도록 구성할꺼니까 -> 외부로 나가는 창구를 단일화 하는거지~
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: jupyter-cip-01
+spec:
+  type: NodePort
+  selector:
+    app: jupyter01
+  ports:
+  - port: 8888
+    targetPort: 8888
+    nodePort: 32001

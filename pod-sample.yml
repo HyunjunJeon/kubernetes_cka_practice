@@ -1,0 +1,12 @@
+apiVersion: v1 # 사용하는 API의 버전(에 따라서 기능이 바뀜)
+kind: Pod # Object 종류
+metadata: # 해당 Object에 대한 메타데이터로 Select 시에 사용됌
+  name: kube-simple-pod
+  labels:
+    app: kube-simple-pod
+spec: # 말그대로 해당 Pod의 스펙으로 어떤 컨테이너들을 얼마나 자원을 가지고 뜨는지 나타냄
+  containers:
+  - name: kube-simple-pod
+    image: arisu1000/simple-container-app:latest
+    ports:
+      - containerPort: 8080
